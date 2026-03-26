@@ -1,22 +1,33 @@
 import axios from 'axios';
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
-export const DASHBOARD_STATS_URL = import.meta.env.VITE_DASHBOARD_STATS_URL || `${API_BASE_URL}/dashboard/stats`;
-
 const api = axios.create({
-    timeout: 10000,
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
     headers: {
-        Accept: 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
     },
 });
 
-const tokenFromEnv = import.meta.env.VITE_API_TOKEN;
-const tokenFromStorage = typeof window !== 'undefined' ? window.localStorage.getItem('api_token') : null;
-const bearerToken = tokenFromEnv || tokenFromStorage;
+// Response interceptor for global error handling
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response) {
+            const { status, data } = error.response;
 
-if (bearerToken) {
-    api.defaults.headers.common.Authorization = `Bearer ${bearerToken}`;
-}
+            if (status === 422) {
+                console.error('Validation Error:', data.errors);
+            } else if (status === 404) {
+                console.error('Resource not found');
+            } else if (status === 500) {
+                console.error('Server error');
+            }
+        } else if (error.request) {
+            console.error('Network error: No response received');
+        }
+
+        return Promise.reject(error);
+    }
+);
 
 export default api;

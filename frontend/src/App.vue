@@ -1,11 +1,7 @@
-<script setup>
-import Dashboard from './components/Dashboard.vue';
-</script>
-
 <template>
-    <main class="app-shell">
-        <section class="app-shell__content">
-            <Dashboard />
-        </section>
-    </main>
+  <MainLayout />
 </template>
+
+<script setup>
+import MainLayout from './components/layout/MainLayout.vue';
+</script>

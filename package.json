@@ -11,15 +11,18 @@
         "laravel:build": "vite build"
     },
     "devDependencies": {
-        "@tailwindcss/vite": "^4.0.0",
+        "@tailwindcss/vite": "^4.2.2",
         "@vitejs/plugin-vue": "^6.0.4",
         "axios": "^1.11.0",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^2.0.0",
-        "tailwindcss": "^4.0.0",
+        "tailwindcss": "^4.2.2",
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "vue": "^3.5.29"
+        "chart.js": "^4.5.1",
+        "vue": "^3.5.29",
+        "vue-chartjs": "^5.3.3",
+        "vue-router": "^4.6.4"
     }
 }
