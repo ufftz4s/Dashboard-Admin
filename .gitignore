@@ -24,4 +24,4 @@ Homestead.yaml
 Thumbs.db
 init
 docker-compose.yml
-
+node_modules/
