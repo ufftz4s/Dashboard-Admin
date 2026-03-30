@@ -46,7 +46,8 @@ const showDropdown = ref(false);
 
 const pageTitle = computed(() => {
   const titles = {
-    '/': 'Dashboard',
+    '/': 'Login',
+    '/dashboard': 'Dashboard',
     '/employees': 'Employees',
     '/attendance': 'Attendance',
   };
