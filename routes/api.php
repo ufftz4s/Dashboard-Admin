@@ -4,6 +4,7 @@ use App\Http\Controllers\AttAttendanceController;
 use App\Http\Controllers\AttDashboardController;
 use App\Http\Controllers\AttEmployeeController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,12 @@ Route::delete('/employees/{id}', [AttEmployeeController::class, 'destroy']);
 Route::get('/attendances', [AttAttendanceController::class, 'index']);
 Route::post('/attendances', [AttAttendanceController::class, 'store']);
 Route::put('/attendances/{id}', [AttAttendanceController::class, 'update']);
+
+// Lokasi Presensi routes
+Route::get('/lokasi', [LokasiController::class, 'index']);
+Route::post('/lokasi', [LokasiController::class, 'store']);
+Route::put('/lokasi/{kodeLokasi}', [LokasiController::class, 'update']);
+Route::delete('/lokasi/{kodeLokasi}', [LokasiController::class, 'destroy']);
 
 // Sanctum authenticated routes (existing)
 Route::middleware('auth:sanctum')->group(function () {

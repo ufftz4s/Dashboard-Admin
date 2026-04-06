@@ -50,6 +50,7 @@ const pageTitle = computed(() => {
     '/dashboard': 'Dashboard',
     '/employees': 'Employees',
     '/attendance': 'Attendance',
+    '/lokasi-presensi': 'Lokasi Presensi',
   };
   return titles[route.path] || 'Dashboard';
 });

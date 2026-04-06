@@ -12,6 +12,21 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: () => import('../pages/Dashboard.vue')
+  },
+  {
+    path: '/employees',
+    name: 'Employees',
+    component: () => import('../pages/Employees.vue')
+  },
+  {
+    path: '/attendance',
+    name: 'Attendance',
+    component: () => import('../pages/Attendance.vue')
+  },
+  {
+    path: '/lokasi-presensi',
+    name: 'LokasiPresensi',
+    component: () => import('../pages/LokasiPresensi.vue')
   }
 ];
 
