@@ -55,6 +55,9 @@ function close() {
   background: white;
   border-radius: 16px;
   width: 90%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   animation: modalIn 0.2s ease-out;
 }
@@ -76,6 +79,7 @@ function close() {
   justify-content: space-between;
   padding: 20px 24px;
   border-bottom: 1px solid #f3f4f6;
+  flex-shrink: 0;
 }
 
 .modal-title {
@@ -106,6 +110,8 @@ function close() {
 
 .modal-body {
   padding: 24px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .modal-footer {
@@ -114,5 +120,6 @@ function close() {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  flex-shrink: 0;
 }
 </style>

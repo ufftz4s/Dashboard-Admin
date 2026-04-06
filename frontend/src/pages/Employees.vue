@@ -2,17 +2,33 @@
   <div class="employees-page">
     <!-- Top Bar -->
     <div class="top-bar">
-      <div class="search-box">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Search employees..."
-          class="search-input"
-          @input="debouncedSearch"
-        />
+      <div class="left-controls">
+        <div class="search-box">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search employees..."
+            class="search-input"
+            @input="debouncedSearch"
+          />
+        </div>
+        <div class="filter-wrapper" style="position: relative;">
+          <button class="btn-filter" @click="isFilterOpen = !isFilterOpen">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            {{ filterDisplay }}
+          </button>
+          <div v-show="isFilterOpen" class="dropdown-menu">
+            <div class="dropdown-item" @click="setFilter('')">Semua Tipe</div>
+            <div class="dropdown-item" @click="setFilter('ASN')">ASN</div>
+            <div class="dropdown-item" @click="setFilter('honorer')">Honorer</div>
+            <div class="dropdown-item" @click="setFilter('kontrak')">Kontrak</div>
+          </div>
+        </div>
       </div>
       <button class="btn-add" @click="openAddModal">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -28,6 +44,7 @@
         <thead>
           <tr>
             <th>Name</th>
+            <th>Type</th>
             <th>Department</th>
             <th>Position</th>
             <th>Email</th>
@@ -42,6 +59,7 @@
                 <span>{{ emp.name }}</span>
               </div>
             </td>
+            <td><Badge v-if="emp.type" :text="emp.type" variant="success" /><span v-else class="text-gray">-</span></td>
             <td><Badge :text="emp.department" variant="success" /></td>
             <td>{{ emp.position }}</td>
             <td class="text-gray">{{ emp.email }}</td>
@@ -91,23 +109,42 @@
     <Modal v-model="showModal" :title="isEditing ? 'Edit Employee' : 'Add Employee'">
       <form @submit.prevent="saveEmployee" class="emp-form">
         <div class="form-group">
-          <label>Name</label>
+          <label>Nama Lengkap</label>
           <input v-model="form.name" type="text" required class="form-input" />
           <span v-if="errors.name" class="form-error">{{ errors.name[0] }}</span>
         </div>
         <div class="form-group">
-          <label>Department</label>
-          <select v-model="form.department" required class="form-input">
-            <option value="">Select department</option>
-            <option value="Finance">Finance</option>
-            <option value="HR">HR</option>
-            <option value="IT">IT</option>
-            <option value="Marketing">Marketing</option>
+          <label>Tipe Pegawai</label>
+          <select v-model="form.type" required class="form-input">
+            <option value="">Pilih Tipe Pegawai</option>
+            <option value="ASN">ASN</option>
+            <option value="honorer">Honorer</option>
+            <option value="kontrak">Kontrak</option>
           </select>
-          <span v-if="errors.department" class="form-error">{{ errors.department[0] }}</span>
+          <span v-if="errors.type" class="form-error">{{ errors.type[0] }}</span>
         </div>
         <div class="form-group">
-          <label>Position</label>
+          <label>Tempat, Tanggal Lahir</label>
+          <input v-model="form.birth_place_date" type="text" required class="form-input" placeholder="Contoh: Jakarta, 01 Januari 1990" />
+          <span v-if="errors.birth_place_date" class="form-error">{{ errors.birth_place_date[0] }}</span>
+        </div>
+        <div class="form-group">
+          <label>NIP</label>
+          <input v-model="form.nip" type="text" required class="form-input" />
+          <span v-if="errors.nip" class="form-error">{{ errors.nip[0] }}</span>
+        </div>
+        <div class="form-group">
+          <label>Lokasi Kerja</label>
+          <input v-model="form.work_location" type="text" required class="form-input" />
+          <span v-if="errors.work_location" class="form-error">{{ errors.work_location[0] }}</span>
+        </div>
+        <div class="form-group">
+          <label>Unit Kerja</label>
+          <input v-model="form.work_unit" type="text" required class="form-input" />
+          <span v-if="errors.work_unit" class="form-error">{{ errors.work_unit[0] }}</span>
+        </div>
+        <div class="form-group">
+          <label>Jabatan</label>
           <input v-model="form.position" type="text" required class="form-input" />
           <span v-if="errors.position" class="form-error">{{ errors.position[0] }}</span>
         </div>
@@ -116,10 +153,7 @@
           <input v-model="form.email" type="email" required class="form-input" />
           <span v-if="errors.email" class="form-error">{{ errors.email[0] }}</span>
         </div>
-        <div class="form-group">
-          <label>Phone</label>
-          <input v-model="form.phone" type="text" class="form-input" />
-        </div>
+
         <div class="form-actions">
           <button type="button" class="btn-cancel" @click="showModal = false">Cancel</button>
           <button type="submit" class="btn-save" :disabled="saving">
@@ -132,13 +166,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import Modal from '../components/common/Modal.vue';
 import Badge from '../components/common/Badge.vue';
 import employeeService from '../services/employeeService';
 
 const employees = ref([]);
 const searchQuery = ref('');
+const typeFilter = ref('');
+const isFilterOpen = ref(false);
 const showModal = ref(false);
 const isEditing = ref(false);
 const editingId = ref(null);
@@ -146,12 +182,28 @@ const saving = ref(false);
 const errors = ref({});
 const pagination = ref({ currentPage: 1, lastPage: 1 });
 
+const filterDisplay = computed(() => {
+  if (typeFilter.value === 'ASN') return 'ASN';
+  if (typeFilter.value === 'honorer') return 'Honorer';
+  if (typeFilter.value === 'kontrak') return 'Kontrak';
+  return 'Filter';
+});
+
+function setFilter(val) {
+  typeFilter.value = val;
+  isFilterOpen.value = false;
+  fetchEmployees(1);
+}
+
 const form = ref({
   name: '',
-  department: '',
+  birth_place_date: '',
+  nip: '',
+  work_location: '',
+  work_unit: '',
   position: '',
   email: '',
-  phone: '',
+  type: '',
 });
 
 let searchTimeout = null;
@@ -167,6 +219,7 @@ async function fetchEmployees(page = 1) {
   try {
     const params = { page, per_page: 10 };
     if (searchQuery.value) params.search = searchQuery.value;
+    if (typeFilter.value) params.type = typeFilter.value;
 
     const res = await employeeService.getAll(params);
     employees.value = res.data.data;
@@ -186,7 +239,16 @@ function goToPage(page) {
 function openAddModal() {
   isEditing.value = false;
   editingId.value = null;
-  form.value = { name: '', department: '', position: '', email: '', phone: '' };
+  form.value = {
+    name: '',
+    birth_place_date: '',
+    nip: '',
+    work_location: '',
+    work_unit: '',
+    position: '',
+    email: '',
+    type: ''
+  };
   errors.value = {};
   showModal.value = true;
 }
@@ -196,10 +258,13 @@ function openEditModal(emp) {
   editingId.value = emp.id;
   form.value = {
     name: emp.name,
-    department: emp.department,
-    position: emp.position,
-    email: emp.email,
-    phone: emp.phone || '',
+    birth_place_date: emp.birth_place_date || '',
+    nip: emp.nip || '',
+    work_location: emp.work_location || '',
+    work_unit: emp.work_unit || emp.department || '',
+    position: emp.position || '',
+    email: emp.email || '',
+    type: emp.type || ''
   };
   errors.value = {};
   showModal.value = true;
@@ -256,9 +321,15 @@ onMounted(() => {
   gap: 16px;
 }
 
+.left-controls {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+}
+
 .search-box {
   position: relative;
-  flex: 1;
+  width: 100%;
   max-width: 360px;
 }
 
@@ -286,7 +357,7 @@ onMounted(() => {
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
 }
 
-.btn-add {
+.btn-filter, .btn-add {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -302,9 +373,35 @@ onMounted(() => {
   white-space: nowrap;
 }
 
-.btn-add:hover {
+.btn-filter:hover, .btn-add:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  width: 140px;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: #f3f4f6;
 }
 
 .table-card {
