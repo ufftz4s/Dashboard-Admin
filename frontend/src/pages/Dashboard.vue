@@ -93,6 +93,9 @@ onMounted(async () => {
 
 <style scoped>
 .dashboard {
+  background: #f3f4f6;
+  min-height: calc(100vh - 96px);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -100,8 +103,14 @@ onMounted(async () => {
 
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
+}
+
+.content-row {
+  gap: 20px;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
 }
 
 .content-row {
