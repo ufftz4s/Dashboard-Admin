@@ -3,7 +3,7 @@
     <!-- Stat Cards -->
     <div class="stats-row">
       <StatCard
-        label="Total Employees"
+        label="Total Pegawai"
         :value="stats.total_employees"
         :icon="icons.employees"
         borderColor="#22c55e"
@@ -11,7 +11,7 @@
         valueColor="#22c55e"
       />
       <StatCard
-        label="Present Today"
+        label="Hadir Hari Ini"
         :value="stats.present_today"
         :icon="icons.present"
         borderColor="#22c55e"
@@ -19,7 +19,7 @@
         valueColor="#22c55e"
       />
       <StatCard
-        label="Absent Today"
+        label="Izin Hari Ini"
         :value="stats.absent_today"
         :icon="icons.absent"
         borderColor="#ef4444"
@@ -27,7 +27,7 @@
         valueColor="#ef4444"
       />
       <StatCard
-        label="Late Today"
+        label="Terlambat Hari Ini"
         :value="stats.late_today"
         :icon="icons.late"
         borderColor="#f59e0b"
