@@ -29,7 +29,7 @@
         <a href="#" class="dropdown-item">Profile</a>
         <a href="#" class="dropdown-item">Settings</a>
         <hr class="dropdown-divider" />
-        <a href="#" class="dropdown-item text-red">Logout</a>
+        <a href="#" class="dropdown-item text-red" @click.prevent="handleLogout">Logout</a>
       </div>
     </div>
   </header>
@@ -37,23 +37,44 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import api from '../../services/api.js';
 
 defineEmits(['toggle-sidebar']);
 
 const route = useRoute();
+const router = useRouter();
 const showDropdown = ref(false);
 
 const pageTitle = computed(() => {
   const titles = {
-    '/': 'Dashboard',
+    '/': 'Login',
+    '/dashboard': 'Dashboard',
     '/employees': 'Employees',
     '/attendance': 'Attendance',
     '/perizinan': 'Permissions',
     '/admin': 'Admin Panel',
+    '/lokasi-presensi': 'Lokasi Presensi',
   };
   return titles[route.path] || 'Dashboard';
 });
+
+const handleLogout = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (token) {
+      await api.post('/logout', {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    }
+  } catch (error) {
+    console.error('Logout error:', error);
+  } finally {
+    // Selalu hapus token dan redirect ke login
+    localStorage.removeItem('token');
+    router.push('/');
+  }
+};
 </script>
 
 <style scoped>

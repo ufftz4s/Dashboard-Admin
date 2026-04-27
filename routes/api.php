@@ -4,6 +4,8 @@ use App\Http\Controllers\AttAttendanceController;
 use App\Http\Controllers\AttDashboardController;
 use App\Http\Controllers\AttEmployeeController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\LokasiController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\JadwalKerjaController;
 use App\Http\Controllers\PegawaiController;
@@ -54,9 +56,16 @@ Route::delete('/jadwal-kerja/{id}', [JadwalKerjaController::class, 'destroy']);
 Route::get('/pegawai', [PegawaiController::class, 'index']);
 Route::post('/pegawai', [PegawaiController::class, 'store']);
 
+// Lokasi Presensi routes
+Route::get('/lokasi', [LokasiController::class, 'index']);
+Route::post('/lokasi', [LokasiController::class, 'store']);
+Route::put('/lokasi/{kodeLokasi}', [LokasiController::class, 'update']);
+Route::delete('/lokasi/{kodeLokasi}', [LokasiController::class, 'destroy']);
+
 // Sanctum authenticated routes (existing)
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::post('/logout', LogoutController::class);
 });
