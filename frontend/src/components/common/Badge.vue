@@ -10,7 +10,7 @@ defineProps({
   variant: {
     type: String,
     default: 'default',
-    validator: (v) => ['default', 'present', 'absent', 'late', 'success', 'danger', 'warning'].includes(v),
+    validator: (v) => ['default', 'present', 'absent', 'late', 'success', 'danger', 'warning', 'pending'].includes(v),
   },
 });
 </script>
@@ -47,5 +47,10 @@ defineProps({
 .badge-warning {
   background: #fef3c7;
   color: #d97706;
+}
+
+.badge-pending {
+  background: #fff7ed;
+  color: #ea580c;
 }
 </style>

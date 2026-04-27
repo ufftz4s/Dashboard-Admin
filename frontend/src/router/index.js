@@ -16,6 +16,16 @@ const routes = [
         name: 'Attendance',
         component: () => import('../pages/Attendance.vue'),
     },
+    {
+        path: '/perizinan',
+        name: 'Perizinan',
+        component: () => import('../pages/Perizinan.vue'),
+    },
+    {
+        path: '/admin',
+        name: 'AdminPanel',
+        component: () => import('../pages/AdminPanel.vue'),
+    },
 ];
 
 const router = createRouter({

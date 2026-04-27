@@ -49,6 +49,8 @@ const pageTitle = computed(() => {
     '/': 'Dashboard',
     '/employees': 'Employees',
     '/attendance': 'Attendance',
+    '/perizinan': 'Permissions',
+    '/admin': 'Admin Panel',
   };
   return titles[route.path] || 'Dashboard';
 });
